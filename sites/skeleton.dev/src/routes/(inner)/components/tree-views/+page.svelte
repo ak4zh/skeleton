@@ -3,7 +3,7 @@
 	import { DocsFeature, type DocsShellSettings } from '$lib/layouts/DocsShell/types';
 	import DocsPreview from '$lib/components/DocsPreview/DocsPreview.svelte';
 	// Components
-	import { TreeView, TreeViewItem, type TreeViewNode } from '@skeletonlabs/skeleton';
+	import { TreeView, TreeViewItem, type TreeViewNode, type TreeViewActions } from '@skeletonlabs/skeleton';
 	// Utilities
 	import { CodeBlock } from '@skeletonlabs/skeleton';
 	// Sveld
@@ -126,6 +126,7 @@
 		}
 	];
 
+	let multiDDActions: TreeViewActions;
 	let multipleDD: TreeViewNode[] = [
 		{
 			content: 'Books',
@@ -809,7 +810,13 @@ let myTreeViewNodes: TreeViewNode[] = [
 			<p>Relational checking is automatically applied when generating your list in a recursive manner.</p>
 			<DocsPreview background="neutral" regionFooter="flex justify-center gap-4">
 				<svelte:fragment slot="preview">
-					<TreeView bind:nodes={multipleDD} selection multiple />
+					<TreeView bind:nodes={multipleDD} bind:actions={multiDDActions} selection multiple />
+				</svelte:fragment>
+				<svelte:fragment slot="footer">
+					<button class="btn variant-filled" on:click={multiDDActions.selectAll}>Select All</button>
+					<button class="btn variant-filled" on:click={multiDDActions.deselectAll}>Unselect All</button>
+					<button class="btn variant-filled" on:click={multiDDActions.expandAll}>Expand All</button>
+					<button class="btn variant-filled" on:click={multiDDActions.collapseAll}>Collapse All</button>
 				</svelte:fragment>
 				<svelte:fragment slot="source">
 					<CodeBlock

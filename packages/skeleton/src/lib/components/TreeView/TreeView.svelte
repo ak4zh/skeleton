@@ -54,6 +54,33 @@
 	/** Provide the ARIA labelledby value. */
 	export let labelledby = '';
 
+	export const actions = {
+		updateAll(subNodes: TreeViewNode[], updateField: 'checked' | 'open', status: boolean) {
+			subNodes.forEach((n) => {
+				n[updateField] = status;
+				if (updateField === 'checked') n.indeterminate = false;
+				if (n.children && n.children.length) actions.updateAll(n.children, updateField, status);
+			});
+			refreshKey = String(Math.random());
+		},
+
+		selectAll() {
+			actions.updateAll(nodes, 'checked', true);
+		},
+
+		deselectAll() {
+			actions.updateAll(nodes, 'checked', false);
+		},
+
+		expandAll() {
+			actions.updateAll(nodes, 'open', true);
+		},
+
+		collapseAll() {
+			actions.updateAll(nodes, 'open', false);
+		}
+	};
+
 	// Functionality
 	/**
 	 * expands all tree view items.
@@ -103,6 +130,7 @@
 
 	// Locals
 	let tree: HTMLDivElement;
+	let refreshKey = String(Math.random());
 </script>
 
 <div
@@ -114,9 +142,11 @@
 	aria-label={labelledby}
 	aria-disabled={disabled}
 >
-	{#if nodes && nodes.length > 0}
-		<TreeViewDataDrivenItem bind:nodes on:change on:click on:toggle on:keydown on:keyup />
-	{:else}
-		<slot />
-	{/if}
+	{#key refreshKey}
+		{#if nodes && nodes.length > 0}
+			<TreeViewDataDrivenItem bind:nodes on:change on:click on:toggle on:keydown on:keyup />
+		{:else}
+			<slot />
+		{/if}
+	{/key}
 </div>

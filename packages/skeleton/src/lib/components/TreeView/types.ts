@@ -16,3 +16,11 @@ export interface TreeViewNode {
 	/** input is set to indeterminate, only availabe in multiple selection mode. */
 	indeterminate?: boolean;
 }
+
+export interface TreeViewActions {
+	updateAll(subNodes: TreeViewNode[], updateField: 'checked' | 'open', status: boolean): void;
+	selectAll(): void;
+	deselectAll(): void;
+	expandAll(): void;
+	collapseAll(): void;
+}
